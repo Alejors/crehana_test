@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from app.domain.models import TaskList
-from app.domain.schemas import TaskListCreate, TaskListUpdate
+from app.domain.entities import TaskList
 
 
 class ITaskListRepository(ABC):
@@ -10,15 +9,15 @@ class ITaskListRepository(ABC):
         raise NotImplementedError("Method Not Implemented")
 
     @abstractmethod
-    def create(self, task_list_in: TaskListCreate) -> TaskList:
+    def create(self, task_list_in: TaskList) -> TaskList:
         raise NotImplementedError("Method Not Implemented")
 
     @abstractmethod
-    def update(self, id: int, task_list_in: TaskListUpdate) -> TaskList:
+    def update(self, id: int, task_list_in: TaskList) -> TaskList:
         raise NotImplementedError("Method Not Implemented")
 
     @abstractmethod
-    def delete(self, id: int) -> None:
+    def delete(self, id: int) -> bool:
         raise NotImplementedError("Method Not Implemented")
 
     @abstractmethod

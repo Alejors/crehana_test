@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from app.domain.models import Task
+from app.domain.entities import Task
 from app.domain.schemas import TaskCreate, TaskUpdate
-
 
 class ITaskRepository(ABC):
     @abstractmethod
