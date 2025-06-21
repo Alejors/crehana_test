@@ -7,7 +7,7 @@ from app.domain.priorities import TaskPriority
 
 @dataclass
 class Task:
-    name: str
+    description: str
     task_list_id: int
     is_completed: bool = False
     priority: TaskPriority = TaskPriority.medium
