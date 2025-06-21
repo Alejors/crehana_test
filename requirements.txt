@@ -2,9 +2,11 @@ fastapi
 uvicorn
 sqlalchemy
 pydantic
+pydantic-settings
 alembic
 pytest
 flake8
 black
 cryptography
 bcrypt
+mysql-connector-python
