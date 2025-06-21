@@ -15,4 +15,3 @@ class TaskListUpdate(TaskListBase):
 
 class TaskListOut(TaskListBase):
     id: int
-
