@@ -7,7 +7,7 @@ from app.domain.priorities import TaskPriority
 
 class TaskBase(BaseModel):
     description: str
-    task_list_id: int
+    task_list_id: int | None = None
     is_completed: bool = False
     priority: TaskPriority = TaskPriority.medium
     
@@ -28,6 +28,14 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     is_completed: Optional[bool] = None
     priority: Optional[TaskPriority] = None
+    
+    def to_entity(self) -> Task:
+        return Task(
+            self.description,
+            None,
+            self.is_completed,
+            self.priority
+        )
 
 
 class TaskOut(TaskBase):
