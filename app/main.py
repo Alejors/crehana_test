@@ -6,6 +6,7 @@ from app.infrastructure.db import init_models, SessionLocal
 from app.infrastructure.repositories import (
     SQLAlchemyTaskListRepository, 
     SQLAlchemyTaskRepository,
+    SQLAlchemyUserRepository,
 )
 
 # Usecases
@@ -13,6 +14,7 @@ from app.usecases import (
     Healthcheck,
     TaskListUsecase,
     TaskUsecase,
+    UserUsecase,
 )
 
 # Controllers/Routers
@@ -20,6 +22,7 @@ from app.api.v1 import (
     create_healthcheck_route,
     create_task_lists_route,
     create_task_route,
+    create_user_route,
 )
 
 
@@ -28,20 +31,24 @@ app = FastAPI(title="Tasks Manager App")
 # Repositories
 sqlalchemy_task_list_repository = SQLAlchemyTaskListRepository(SessionLocal)
 sqlalchemy_task_repository = SQLAlchemyTaskRepository(SessionLocal)
+sqlalchemy_user_repository = SQLAlchemyUserRepository(SessionLocal)
 
 # Usecases
 healthcheck_usecase = Healthcheck()
 task_list_usecase = TaskListUsecase(sqlalchemy_task_list_repository)
 task_usecase = TaskUsecase(sqlalchemy_task_repository, sqlalchemy_task_list_repository)
+user_usecase = UserUsecase(sqlalchemy_user_repository)
 
 healthcheck_router = create_healthcheck_route(healthcheck_usecase)
 task_list_router = create_task_lists_route(task_list_usecase)
 task_router = create_task_route(task_usecase)
+user_router = create_user_route(user_usecase)
 
 v1_routers = [
     healthcheck_router,
     task_list_router,
     task_router,
+    user_router,
 ]
 
 for router in v1_routers:

@@ -1,9 +1,11 @@
 fastapi
 uvicorn
 pydantic
+pydantic[email]
 pydantic-settings
 sqlalchemy
 asyncmy
+passlib
 cryptography
 bcrypt
 flake8
