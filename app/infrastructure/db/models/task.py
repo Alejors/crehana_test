@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Enum as SQLAEnum
+from sqlalchemy.orm import relationship
 
 from app.domain.entities import Task
 from .timemixin import TimestampMixin
@@ -14,6 +15,8 @@ class TaskModel(TimestampMixin, Base):
     task_list_id = Column(Integer, ForeignKey("task_lists.id"), nullable=False)
     is_completed = Column(Boolean, default=False)
     priority = Column(SQLAEnum(TaskPriority), default=TaskPriority.medium)
+    
+    task_list = relationship("TaskListModel", back_populates="tasks")
     
     @staticmethod
     def from_entity(entity: Task) -> "TaskModel":

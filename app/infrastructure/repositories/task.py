@@ -40,7 +40,7 @@ class SQLAlchemyTaskRepository(ITaskRepository):
     
     async def update(self, task_id: int, update_values: dict) -> Task:
         async with self.db() as session:
-            task_model = await self._find_by_id(task_id)
+            task_model = await self._find_by_id(session, task_id)
             if not task_model:
                 return None
             
@@ -65,7 +65,8 @@ class SQLAlchemyTaskRepository(ITaskRepository):
 
     async def list_by_task_list(self, task_list_id: int, *, filters: dict = None) -> List[Task]:
         
-        aditional_filters = parse_filters(filters) if filters else []
+        additional_filters = parse_filters(filters, TaskModel) if filters else []
+        print(f"ADITIONAL FILTERS: {additional_filters}")
         
         async with self.db() as session:
             stmt = (
@@ -73,8 +74,8 @@ class SQLAlchemyTaskRepository(ITaskRepository):
                 .where(
                     TaskModel.task_list_id == task_list_id,
                     TaskModel.deleted_at.is_(None),
+                    additional_filters
                 )
-                .where(*aditional_filters)
             )
             
             result = await session.execute(stmt)
