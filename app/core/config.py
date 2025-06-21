@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     @property
     def db_url(self):
         return (
-            f"mysql+mysqlconnector://{self.MYSQL_USER}:"
+            f"mysql+asyncmy://{self.MYSQL_USER}:"
             f"{self.MYSQL_PASSWORD}@{self.MYSQL_HOST}:"
             f"{self.MYSQL_PORT}/{self.MYSQL_DB}"
         )
