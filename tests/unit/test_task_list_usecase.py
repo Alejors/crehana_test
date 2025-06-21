@@ -65,6 +65,19 @@ async def test_update_list(mock_task_list_repo):
     mock_task_list_repo.update.assert_awaited_once()
     
 @pytest.mark.asyncio
+async def test_update_none(mock_task_list_repo):
+    # Probamos que cuando se intenta hacer una actualización con todos los campos vacíos, 
+    # el caso de uso lo detiene.
+    usecase = TaskListUsecase(task_list_repository=mock_task_list_repo)
+    
+    task_list = TaskList(name=None)
+    
+    result = await usecase.update_list(2, task_list)
+    
+    assert result == None
+    mock_task_list_repo.update.assert_not_called()
+    
+@pytest.mark.asyncio
 async def test_delete_list(mock_task_list_repo):
     mock_task_list_repo.delete = AsyncMock(return_value=True)
     
