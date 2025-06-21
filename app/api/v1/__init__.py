@@ -1,1 +1,1 @@
-from .routes import router
+from .healthcheck import create_healthcheck_route
