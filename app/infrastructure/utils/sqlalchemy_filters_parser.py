@@ -10,7 +10,7 @@ def _convert_value(value: str, column_type):
         return int(value)
     elif isinstance(column_type, Float):
         return float(value)
-    elif isinstance(column_type, Boolean):
+    elif column_type.__class__.__name__.lower() in {"boolean", "bool", "tinyint"}:
         return value.lower() in {"true", "1", "yes"}
     elif isinstance(column_type, DateTime):
         try:
@@ -32,7 +32,7 @@ def parse_filters(filters: dict[str, str], model: DeclarativeMeta):
         if column is None:
             continue
 
-        column_type = getattr(column.type, "__class__", None)
+        column_type = column.type
         try:
             if op == "in":
                 raw_items = raw_value.split(",")
