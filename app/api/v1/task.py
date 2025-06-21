@@ -1,13 +1,14 @@
 from typing import List
-from fastapi import APIRouter, HTTPException, status, Request
+from fastapi import APIRouter, HTTPException, status, Request, Depends
 
 from app.usecases import TaskUsecase
+from app.domain.utils import verify_token
 from app.domain.schemas import TaskCreate, TaskUpdate, TaskOut, ApiResponse, TasksList
 
 
 def create_task_route(task_usecase: TaskUsecase) -> APIRouter:
 
-    router: APIRouter = APIRouter()
+    router: APIRouter = APIRouter(dependencies=[Depends(verify_token)])
 
     @router.get("/task/{task_id}", response_model=ApiResponse[TaskOut])
     async def get_task(task_id: int) -> TaskOut:

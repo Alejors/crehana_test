@@ -8,6 +8,7 @@ asyncmy
 passlib
 cryptography
 bcrypt
+PyJWT
 flake8
 black
 httpx

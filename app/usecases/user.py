@@ -1,6 +1,6 @@
 from app.domain.entities import User
 from app.domain.interfaces import IUserRepository
-from app.domain.utils import hash_password, verify_password
+from app.domain.utils import hash_password, verify_password, create_access_token
 
 
 class UserUsecase:
@@ -19,8 +19,8 @@ class UserUsecase:
         if not verify_password(user_in.password, user_exist.password):
             return None
         
-        print("CREAMOS UN TOKEN Y LO RETORNAMOS")
-        return user_exist
+        token = create_access_token({"email": user_exist.email, "id": user_exist.id})
+        return user_exist, token
     
     async def get_user(self, user_email: str) -> User | None:
         return await self.user_repository.get_user_by_email(user_email)
