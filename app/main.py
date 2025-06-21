@@ -3,7 +3,10 @@ from fastapi import FastAPI
 from app.infrastructure.db import init_models, SessionLocal
 
 # Repositories
-from app.infrastructure.repositories import SQLAlchemyTaskListRepository
+from app.infrastructure.repositories import (
+    SQLAlchemyTaskListRepository, 
+    SQLAlchemyTaskRepository,
+)
 
 # Usecases
 from app.usecases import Healthcheck, TaskListUsecase
@@ -15,6 +18,7 @@ from app.api.v1 import create_healthcheck_route, create_task_lists_route
 app = FastAPI(title="Tasks Manager App")
 
 sqlalchemy_task_list_repository = SQLAlchemyTaskListRepository(SessionLocal)
+sqlalchemy_task_repository = SQLAlchemyTaskRepository(SessionLocal)
 
 healthcheck_usecase = Healthcheck()
 task_list_usecase = TaskListUsecase(sqlalchemy_task_list_repository)
