@@ -10,13 +10,10 @@ class TaskBase(BaseModel):
     task_list_id: int | None = None
     is_completed: bool = False
     priority: TaskPriority = TaskPriority.medium
-    
+
     def to_entity(self) -> Task:
         return Task(
-            self.description,
-            self.task_list_id,
-            self.is_completed,
-            self.priority
+            self.description, self.task_list_id, self.is_completed, self.priority
         )
 
 
@@ -28,19 +25,14 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     is_completed: Optional[bool] = None
     priority: Optional[TaskPriority] = None
-    
+
     def to_entity(self) -> Task:
-        return Task(
-            self.description,
-            None,
-            self.is_completed,
-            self.priority
-        )
+        return Task(self.description, None, self.is_completed, self.priority)
 
 
 class TaskOut(TaskBase):
     id: int
-    
+
     @classmethod
     def from_entity(cls, entity: Task) -> "TaskOut":
         return cls(
@@ -48,5 +40,5 @@ class TaskOut(TaskBase):
             description=entity.description,
             task_list_id=entity.task_list_id,
             is_completed=entity.is_completed,
-            priority=entity.priority
+            priority=entity.priority,
         )

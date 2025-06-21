@@ -4,7 +4,7 @@ from .task import Task
 
 
 class TaskList:
-    
+
     def __init__(
         self,
         *,
@@ -21,7 +21,7 @@ class TaskList:
         self.created_at = created_at
         self.updated_at = updated_at
         self.deleted_at = deleted_at
-        
+
     @property
     def completion_percentage(self) -> int:
         if not self.tasks:

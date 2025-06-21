@@ -1,7 +1,8 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import DeclarativeMeta
-from sqlalchemy.sql.sqltypes import String, Integer, DateTime, Float, Boolean
+from sqlalchemy.sql.sqltypes import String, Integer, DateTime, Float
 from datetime import datetime
+
 
 def _convert_value(value: str, column_type):
     if isinstance(column_type, String):
@@ -18,6 +19,7 @@ def _convert_value(value: str, column_type):
         except ValueError:
             raise ValueError("Invalid datetime format")
     return value
+
 
 def parse_filters(filters: dict[str, str], model: DeclarativeMeta):
     conditions = []
@@ -36,7 +38,9 @@ def parse_filters(filters: dict[str, str], model: DeclarativeMeta):
         try:
             if op == "in":
                 raw_items = raw_value.split(",")
-                value = [_convert_value(item.strip(), column_type) for item in raw_items]
+                value = [
+                    _convert_value(item.strip(), column_type) for item in raw_items
+                ]
             else:
                 value = _convert_value(raw_value, column_type)
         except Exception:

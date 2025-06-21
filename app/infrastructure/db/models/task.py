@@ -15,9 +15,9 @@ class TaskModel(TimestampMixin, Base):
     task_list_id = Column(Integer, ForeignKey("task_lists.id"), nullable=False)
     is_completed = Column(Boolean, default=False)
     priority = Column(SQLAEnum(TaskPriority), default=TaskPriority.medium)
-    
+
     task_list = relationship("TaskListModel", back_populates="tasks")
-    
+
     @staticmethod
     def from_entity(entity: Task) -> "TaskModel":
         return TaskModel(
@@ -27,7 +27,7 @@ class TaskModel(TimestampMixin, Base):
             is_completed=entity.is_completed,
             priority=entity.priority,
         )
-        
+
     def to_entity(self) -> Task:
         return Task(
             id=self.id,

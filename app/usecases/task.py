@@ -19,18 +19,22 @@ class TaskUsecase:
 
     async def create(self, task_in: Task) -> Task:
         return await self.task_repository.create(task_in)
-    
+
     async def update(self, id: int, task_in: Task) -> Task:
         update_values = extract_non_null_fields(task_in)
         if not update_values:
             return None
-        
+
         return await self.task_repository.update(id, update_values)
-    
+
     async def delete(self, id: int) -> bool:
         return await self.task_repository.delete(id)
-    
-    async def list_by_task_list(self, task_list_id: int, filters: dict = None) -> tuple[List[Task], int]:
+
+    async def list_by_task_list(
+        self, task_list_id: int, filters: dict = None
+    ) -> tuple[List[Task], int]:
         task_list = await self.task_list_repository.get(task_list_id)
-        tasks = await self.task_repository.list_by_task_list(task_list_id, filters=filters)
+        tasks = await self.task_repository.list_by_task_list(
+            task_list_id, filters=filters
+        )
         return tasks, task_list.completion_percentage
