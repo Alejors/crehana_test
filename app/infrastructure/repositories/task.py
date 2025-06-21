@@ -65,8 +65,7 @@ class SQLAlchemyTaskRepository(ITaskRepository):
 
     async def list_by_task_list(self, task_list_id: int, *, filters: dict = None) -> List[Task]:
         
-        additional_filters = parse_filters(filters, TaskModel) if filters else []
-        print(f"ADITIONAL FILTERS: {additional_filters}")
+        additional_filters = parse_filters(filters, TaskModel) if filters else True
         
         async with self.db() as session:
             stmt = (
