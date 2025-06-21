@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+alembic
+pytest
+flake8
+black
+cryptography
+bcrypt

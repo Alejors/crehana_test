@@ -1,0 +1,1 @@
+- Se decide crear una estructura base que se usará como esqueleto para comenzar a construir la app.
