@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from app.infrastructure import Base, engine
 
 # Models
-from app.domain import models
+from app.domain import models # noqa: F401
 
 # Usecases
 from app.usecases import Healthcheck
