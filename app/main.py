@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from app.infrastructure.db import init_models, SessionLocal
 
@@ -25,8 +26,18 @@ from app.api.v1 import (
     create_user_route,
 )
 
+# Custom Exceptions
+from app.exceptions import TaskListDeletionError
+
 
 app = FastAPI(title="Tasks Manager App")
+
+@app.exception_handler(TaskListDeletionError)
+async def task_list_deletion_exception_handler(request: Request, exc: TaskListDeletionError):
+    return JSONResponse(
+        status_code=400,
+        content={"detail": exc.message}
+    )
 
 # Repositories
 sqlalchemy_task_list_repository = SQLAlchemyTaskListRepository(SessionLocal)

@@ -54,7 +54,7 @@ class SQLAlchemyTaskListRepository(ITaskListRepository):
             task_list_model = await self._find_by_id(session, id)
             if not task_list_model:
                 return False
-            
+
             task_list_model.deleted_at = datetime.now()
             await session.commit()
             

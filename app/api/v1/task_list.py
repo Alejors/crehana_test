@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.usecases import TaskListUsecase
 from app.domain.utils import verify_token
+from app.exceptions import TaskListDeletionError
 from app.domain.schemas import TaskListCreate, TaskListUpdate, TaskListOut
 
 
@@ -46,6 +47,8 @@ def create_task_lists_route(task_list_usecase: TaskListUsecase) -> APIRouter:
                 raise HTTPException(status_code=404, detail="Task List Could Not Be Deleted")
             return
         except HTTPException:
+            raise
+        except TaskListDeletionError:
             raise
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
