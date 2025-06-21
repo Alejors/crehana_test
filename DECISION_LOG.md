@@ -1,1 +1,12 @@
 - Se decide crear una estructura base que se usará como esqueleto para comenzar a construir la app.
+- Se define base declarativa en sql_alchemy y se agregan configuraciones para crear tablas mapeadas de manera automática al levantar el proyecto. Esta decisión no sería utilizada en un entorno productivo y sólo se toma por ser un test que se levantará en entorno dockerizado.En proyecto con objetivo productivo se optaría por controlar versionado de tablas mediante Alembic.
+- Se definen modelos de base de dato sql_alchemy para task_list y task, extendiendo un TimestampsMixin base que agrega las 3 columnas de timestamps que se utilizarán por defecto.
+- Se definen esquemas de pydantic para las entidades de dominio que serán retornadas por los repositorios.
+- Se definen interfaces que se inyectarán a los casos de uso, para manejar lógica centralizada y no acoplada a ORMs.
+- Se define que las rutas se generarán a través de métodos que reciban los casos de uso, para cumplir con inyección de dependencias en los casos de uso.
+- Se define estructura en un primer controlador ("healthcheck") y se genera instanciación de prueba en app.
+- Se genera tests para ruta de prueba, validando configuraciones para pytest, entregando la cobertura esperada.
+- Se generó CRUD de Task List sin considerar la relación con Tasks. 
+- Se crearon pruebas unitarias y de integración aún sin agregar las Tasks Individuales
+- Se crea métodos utilitarios para filtrar elementos vacíos en los métodos updates, evitando llamadas innecesarias a los repositorios.
+- Se crea utilitario para procesar filtros creando listado de filtros adecuados para SQLAlchemy. Esto permite la reutilización centralizada en nuevos módulos o entidades sin necesidad de repetir código.
