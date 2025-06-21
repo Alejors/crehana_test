@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
+
+from app.domain.entities import Task
 from app.domain.priorities import TaskPriority
 
 
@@ -8,6 +10,14 @@ class TaskBase(BaseModel):
     task_list_id: int
     is_completed: bool = False
     priority: TaskPriority = TaskPriority.medium
+    
+    def to_entity(self) -> Task:
+        return Task(
+            self.description,
+            self.task_list_id,
+            self.is_completed,
+            self.priority
+        )
 
 
 class TaskCreate(TaskBase):
@@ -22,3 +32,13 @@ class TaskUpdate(BaseModel):
 
 class TaskOut(TaskBase):
     id: int
+    
+    @classmethod
+    def from_entity(cls, entity: Task) -> "TaskOut":
+        return cls(
+            id=entity.id,
+            description=entity.description,
+            task_list_id=entity.task_list_id,
+            is_completed=entity.is_completed,
+            priority=entity.priority
+        )
