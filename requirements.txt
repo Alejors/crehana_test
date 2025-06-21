@@ -3,7 +3,7 @@ uvicorn
 pydantic
 pydantic-settings
 sqlalchemy
-mysql-connector-python
+asyncmy
 cryptography
 bcrypt
 flake8
