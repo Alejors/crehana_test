@@ -16,5 +16,3 @@ class TaskListUpdate(TaskListBase):
 class TaskListOut(TaskListBase):
     id: int
 
-    class Config:
-        orm_mode = True

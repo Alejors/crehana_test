@@ -22,6 +22,3 @@ class TaskUpdate(BaseModel):
 
 class TaskOut(TaskBase):
     id: int
-
-    class Config:
-        orm_mode = True
