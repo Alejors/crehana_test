@@ -2,7 +2,8 @@
 omit = 
     tests/*
     */__init__.py
-    */infrastructure/*
+    */infrastructure/db/*
+    */infrastructure/repositories/*
     */core/*
     */domain/*
     main.py
