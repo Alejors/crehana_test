@@ -13,7 +13,7 @@ class ITaskListRepository(ABC):
         raise NotImplementedError("Method Not Implemented")
 
     @abstractmethod
-    def update(self, id: int, task_list_in: TaskList) -> TaskList:
+    def update(self, id: int, update_values: dict) -> TaskList:
         raise NotImplementedError("Method Not Implemented")
 
     @abstractmethod
