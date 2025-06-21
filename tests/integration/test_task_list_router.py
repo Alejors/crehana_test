@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock
 from app.api.v1 import create_task_lists_route
 from app.usecases import TaskListUsecase
 from app.domain.entities import TaskList
+from app.domain.utils import verify_token
 
 
 TASK1 = TaskList(id=1, name="Lista 1")
@@ -17,10 +18,11 @@ def mock_usecase():
     return AsyncMock(spec=TaskListUsecase)
 
 @pytest.fixture
-def client(mock_usecase):
+def client(mock_usecase, override_auth_dependency):
     app = FastAPI()
     router = create_task_lists_route(mock_usecase)
     app.include_router(router, prefix="/api/v1")
+    app.dependency_overrides[verify_token] = override_auth_dependency
     return TestClient(app)
 
 def test_get_task_lists(client, mock_usecase):

@@ -12,3 +12,9 @@ def mock_task_list_repo():
 def mock_task_repo():
     repo = AsyncMock(spec=ITaskRepository)
     return repo
+
+@pytest.fixture
+def override_auth_dependency():
+    def fake_auth():
+        return True
+    return fake_auth
