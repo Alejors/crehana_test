@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import select
+from sqlalchemy import select, update
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
@@ -19,11 +19,7 @@ class SQLAlchemyTaskListRepository(ITaskListRepository):
             TaskListModel.deleted_at.is_(None),
         )
         result = await session.execute(stmt)
-        task_list_model = result.scalar_one_or_none()
-        if not task_list_model:
-            return None
-        
-        return task_list_model
+        return result.scalar_one_or_none()
         
     async def create(self, task_list: TaskList) -> TaskList:
         async with self.db() as session:
@@ -39,13 +35,14 @@ class SQLAlchemyTaskListRepository(ITaskListRepository):
             task_list_model = await self._find_by_id(session, id)
             return task_list_model.to_entity() if task_list_model else None
     
-    async def update(self, id: int, task_list: TaskList) -> TaskList:
+    async def update(self, id: int, dict_values: dict) -> TaskList:
         async with self.db() as session:
             task_list_model = await self._find_by_id(session, id)
             if not task_list_model:
                 return None
             
-            task_list_model.name = task_list.name if task_list.name else task_list_model.name
+            for key, value in dict_values.items():
+                setattr(task_list_model, key, value)
             
             await session.commit()
             await session.refresh(task_list_model)

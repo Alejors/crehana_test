@@ -1,5 +1,6 @@
-from app.domain.interfaces import ITaskListRepository
+from app.domain.utils import extract_non_null_fields
 from app.domain.entities import TaskList
+from app.domain.interfaces import ITaskListRepository
 
 
 class TaskListUsecase:
@@ -16,7 +17,10 @@ class TaskListUsecase:
         return await self.task_list_repository.create(task_list)
     
     async def update_list(self, task_list_id: int, task_list: TaskList) -> TaskList:
-        return await self.task_list_repository.update(task_list_id, task_list)
+        update_dict = extract_non_null_fields(task_list)
+        if not update_dict:
+            return None
+        return await self.task_list_repository.update(task_list_id, update_dict)
     
     async def delete_list(self, task_list_id: int) -> bool:
         return await self.task_list_repository.delete(task_list_id)
