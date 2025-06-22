@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import AsyncMock
 
-from app.domain.entities import Task, TaskList
+from app.domain.entities import Task, TaskList, User
 from app.usecases import TaskUsecase
 
 
@@ -34,6 +34,36 @@ async def test_create_task(mock_task_repo, mock_task_list_repo, mock_user_repo, 
     assert isinstance(result, Task)
     assert result.id == 1
     
+@pytest.mark.asyncio
+async def test_create_task_with_assignee(mock_task_repo, mock_task_list_repo, mock_user_repo, mock_mailing_service):
+    mock_task_repo.create = AsyncMock(return_value=TASK1)
+    mock_user_repo.get_user_by_email = AsyncMock(return_value=User(id=1, email="test@test.com", password="abc123"))
+    
+    usecase = TaskUsecase(mock_task_repo, mock_task_list_repo, mock_user_repo, mock_mailing_service)
+    
+    task_in = Task(description="test-1", task_list_id=1, assigned_user_email="test@test.com")
+    
+    result = await usecase.create(task_in)
+    
+    assert isinstance(result, Task)
+    mock_user_repo.get_user_by_email.assert_called_once()
+
+@pytest.mark.asyncio
+async def test_create_task_with_inexistent_assignee(mock_task_repo, mock_task_list_repo, mock_user_repo, mock_mailing_service):
+    mock_task_repo.create = AsyncMock(return_value=TASK1)
+    mock_user_repo.get_user_by_email = AsyncMock(return_value=None)
+    
+    usecase = TaskUsecase(mock_task_repo, mock_task_list_repo, mock_user_repo, mock_mailing_service)
+    
+    task_in = Task(description="test-1", task_list_id=1, assigned_user_email="test@test.com")
+    
+    result = await usecase.create(task_in)
+    
+    assert isinstance(result, Task)
+    mock_user_repo.get_user_by_email.assert_called_once()
+    mock_mailing_service.sendmail.assert_called_once()
+
+
 @pytest.mark.asyncio
 async def test_update_task(mock_task_repo, mock_task_list_repo, mock_user_repo, mock_mailing_service):
     mock_task_repo.update = AsyncMock(return_value=TASK2)
