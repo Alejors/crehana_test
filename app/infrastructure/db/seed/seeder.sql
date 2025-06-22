@@ -11,15 +11,15 @@ VALUES
   (2, 'list2'),
   (3, 'list3');
 
-INSERT IGNORE INTO tasks (id, description, task_list_id, is_completed, priority)
+INSERT IGNORE INTO tasks (id, description, task_list_id, is_completed, priority, assigned_user_id)
 VALUES
-  (1, 'Tarea 1 de list1', 1, false, 'low'),
-  (2, 'Tarea 2 de list1', 1, true,  'medium'),
-  (3, 'Tarea 3 de list1', 1, false, 'high'),
+  (1, 'Tarea 1 de list1', 1, false, 'low', NULL),
+  (2, 'Tarea 2 de list1', 1, true,  'medium', NULL),
+  (3, 'Tarea 3 de list1', 1, false, 'high', NULL),
 
-  (4, 'Tarea 1 de list2', 2, true,  'medium'),
-  (5, 'Tarea 2 de list2', 2, false, 'low'),
+  (4, 'Tarea 1 de list2', 2, true,  'medium', NULL),
+  (5, 'Tarea 2 de list2', 2, false, 'low', NULL),
 
-  (6, 'Tarea 1 de list3', 3, true,  'medium'),
-  (7, 'Tarea 2 de list3', 3, true,  'high'),
-  (8, 'Tarea 3 de list3', 3, false, 'medium');
+  (6, 'Tarea 1 de list3', 3, true,  'medium', 1),
+  (7, 'Tarea 2 de list3', 3, true,  'high', 2),
+  (8, 'Tarea 3 de list3', 3, false, 'medium', 3);
