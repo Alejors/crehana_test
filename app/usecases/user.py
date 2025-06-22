@@ -12,12 +12,12 @@ class UserUsecase:
         user_in.password = hash_password(user_in.password)
         return await self.user_repository.create_user(user_in)
 
-    async def login_user(self, user_in: User) -> User:
+    async def login_user(self, user_in: User) -> tuple[User, str]:
         user_exist = await self.get_user(user_in.email)
         if not user_exist:
-            return None
+            return None, None
         if not verify_password(user_in.password, user_exist.password):
-            return None
+            return None, None
 
         token = create_access_token({"email": user_exist.email, "id": user_exist.id})
         return user_exist, token
