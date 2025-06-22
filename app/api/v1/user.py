@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response, status
 
 from app.usecases import UserUsecase
 from app.domain.schemas import UserCreate, UserBase, UserOut, ApiResponse
 
+
+TOKEN_NAME="access_token"
 
 def create_user_route(user_usecase: UserUsecase) -> APIRouter:
 
@@ -30,7 +32,7 @@ def create_user_route(user_usecase: UserUsecase) -> APIRouter:
 
             # Seteamos la cookie para que quede disponible en el navegador
             response.set_cookie(
-                key="access_token",
+                key=TOKEN_NAME,
                 value=token,
                 httponly=True,
                 secure=False,
@@ -45,5 +47,10 @@ def create_user_route(user_usecase: UserUsecase) -> APIRouter:
             raise
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+        
+    @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+    async def logout(response: Response):
+        response.delete_cookie(key=TOKEN_NAME)
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     return router
