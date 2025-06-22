@@ -28,6 +28,7 @@ class TaskModel(TimestampMixin, Base):
             task_list_id=entity.task_list_id,
             is_completed=entity.is_completed,
             priority=entity.priority,
+            assigned_user_id=entity.assigned_user_id
         )
 
     def to_entity(self) -> Task:
@@ -40,5 +41,6 @@ class TaskModel(TimestampMixin, Base):
             created_at=self.created_at,
             updated_at=self.updated_at,
             deleted_at=self.deleted_at,
+            assigned_user_id=self.assigned_user_id,
             assigned_user_email=self.assigned_user.email if self.assigned_user else None
         )

@@ -48,7 +48,7 @@ sqlalchemy_user_repository = SQLAlchemyUserRepository(SessionLocal)
 # Usecases
 healthcheck_usecase = Healthcheck()
 task_list_usecase = TaskListUsecase(sqlalchemy_task_list_repository)
-task_usecase = TaskUsecase(sqlalchemy_task_repository, sqlalchemy_task_list_repository)
+task_usecase = TaskUsecase(sqlalchemy_task_repository, sqlalchemy_task_list_repository, sqlalchemy_user_repository)
 user_usecase = UserUsecase(sqlalchemy_user_repository)
 
 healthcheck_router = create_healthcheck_route(healthcheck_usecase)

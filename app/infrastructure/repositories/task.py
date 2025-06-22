@@ -40,7 +40,7 @@ class SQLAlchemyTaskRepository(ITaskRepository):
             session.add(task_model)
             await session.commit()
             await session.refresh(task_model)
-            return task_model.to_entity()
+            return await self.get(task_model.id)
 
     async def update(self, task_id: int, update_values: dict) -> Task:
         async with self.db() as session:

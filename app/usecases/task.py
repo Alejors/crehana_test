@@ -1,7 +1,7 @@
 from typing import List
 
 from app.domain.entities import Task
-from app.domain.interfaces import ITaskRepository, ITaskListRepository
+from app.domain.interfaces import ITaskRepository, ITaskListRepository, IUserRepository
 from app.domain.utils import extract_non_null_fields
 
 
@@ -10,17 +10,31 @@ class TaskUsecase:
         self,
         task_repository: ITaskRepository,
         task_list_repository: ITaskListRepository,
+        user_repository: IUserRepository,
     ):
         self.task_repository = task_repository
         self.task_list_repository = task_list_repository
+        self.user_repository = user_repository
 
     async def get(self, id: int) -> Task:
         return await self.task_repository.get(id)
+    
+    async def _check_user(self, task_in: Task) -> Task:
+        if task_in.assigned_user_email:
+            user_exists = await self.user_repository.get_user_by_email(task_in.assigned_user_email)
+            if not user_exists:
+                print("VAMOS A TENER QUE MANDAR UN MAIL INVITANDO A ESTE USUARIO")
+            else:
+                task_in.assigned_user_id = user_exists.id
+        return task_in
 
     async def create(self, task_in: Task) -> Task:
+        task_in = await self._check_user(task_in)
+
         return await self.task_repository.create(task_in)
 
     async def update(self, id: int, task_in: Task) -> Task:
+        task_in = await self._check_user(task_in)
         update_values = extract_non_null_fields(task_in)
         if not update_values:
             return None
