@@ -25,7 +25,7 @@ class TaskUsecase:
 
     async def get(self, id: int) -> Task:
         return await self.task_repository.get(id)
-    
+
     async def _check_user(self, task_in: Task) -> Task:
         user_email = task_in.assigned_user_email
         if user_email:

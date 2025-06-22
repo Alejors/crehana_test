@@ -14,7 +14,11 @@ class TaskBase(BaseModel):
 
     def to_entity(self) -> Task:
         return Task(
-            self.description, self.task_list_id, self.is_completed, self.priority, assigned_user_email=self.assigned_user_email
+            self.description,
+            self.task_list_id,
+            self.is_completed,
+            self.priority,
+            assigned_user_email=self.assigned_user_email,
         )
 
 
@@ -29,7 +33,13 @@ class TaskUpdate(BaseModel):
     assigned_user_email: Optional[EmailStr] = None
 
     def to_entity(self) -> Task:
-        return Task(self.description, None, self.is_completed, self.priority, assigned_user_email=self.assigned_user_email)
+        return Task(
+            self.description,
+            None,
+            self.is_completed,
+            self.priority,
+            assigned_user_email=self.assigned_user_email,
+        )
 
 
 class TaskOut(TaskBase):
