@@ -51,7 +51,7 @@ Esto levantará:
 - Backend Python
 - Base de datos
 
-> El backend estará accesible en `http://localhost:{VALOR_DE:DOCKER_SERVICE_PORT}`
+> El backend estará accesible en `http://localhost:8000` tomando los valores propuestos en el ejemplo.
 
 #### Opcional: Seeder
 
@@ -60,7 +60,7 @@ Se agregó un archivo `.sql` dentro de `/infrastructure/db/seed`. Este se encarg
 Para utilizar se puede correr el siguiente comando:
 
 ```bash
-docker-compose exec -T db mysql -uroot -proot <valor_de:MYSQL_DB> < ./app/infrastructure/db/seed/seeder.sql
+docker-compose exec -T db mysql -uroot -proot tasks_manager < ./app/infrastructure/db/seed/seeder.sql
 ```
 
 > Este comando crea usuarios de prueba con la clave `random1234`.
@@ -95,7 +95,7 @@ Content-Type: application/json
 3. **Crear una tarea en esa lista:**
 
 ```http
-POST /api/v1/task-lists/{ID_OBTENIDO_EN_LA_LISTA}/tasks
+POST /api/v1/task-lists/1/tasks
 Content-Type: application/json
 
 {
@@ -207,13 +207,13 @@ Este proyecto utiliza [Black](https://black.readthedocs.io/en/stable/) como form
 - **Formatear el código con Black:**
 
 ```bash
-dc exec api black app/
+dc exec api black .
 ```
 
 - **Verificar problemas con Flask8**
 
 ```bash
-dc exec api flake8 app/
+dc exec api flake8 .
 ```
 
 > Se recomienda configurar el editor para ejecutar automáticamente Black y Flake8 al guardar.
