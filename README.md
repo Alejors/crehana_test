@@ -53,13 +53,91 @@ Esto levantará:
 
 > El backend estará accesible en `http://localhost:{VALOR_DE:DOCKER_SERVICE_PORT}`
 
-## 📚 Documentación de la API
+#### Opcional: Seeder
+
+Se agregó un archivo `.sql` dentro de `/infrastructure/db/seed`. Este se encarga de cargar datos iniciales para poder probar endpoints.
+
+Para utilizar se puede correr el siguiente comando:
+
+```bash
+docker-compose exec -T db mysql -uroot -proot <valor_de:MYSQL_DB> < ./app/infrastructure/db/seed/seeder.sql
+```
+
+> Este comando crea usuarios de prueba con la clave `random1234`.
+
+## 🧪 Ejemplo de uso
+
+1. **Iniciar sesión** (con esto se setea la cookie que permite el acceso a las rutas protegidas).
+
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user1@example.com",
+  "password": "yourpassword"
+}
+```
+
+> Esto almacenará una cookie `access_token` automáticamente en el navegador o cliente HTTP.
+
+2. **Crear una lista de tareas:**
+
+```http
+POST /api/v1/task-lists
+Content-Type: application/json
+
+{
+  "name": "Mi nueva lista"
+}
+```
+
+3. **Crear una tarea en esa lista:**
+
+```http
+POST /api/v1/task-lists/{ID_OBTENIDO_EN_LA_LISTA}/tasks
+Content-Type: application/json
+
+{
+  "description": "Comprar pan",
+  "is_completed": false,
+  "priority": "low",
+  "assigned_user_email": "user2@example.com"
+}
+```
+
+> El campo `assigned_user_email` es opcional. Si se proporciona y el usuario no existe, se simula una invitación por correo.
+
+4. **Listar tareas con filtros** (por ejemplo, tareas incompletas con prioridad baja o media, creadas después del 2025-06-20):
+
+```http
+GET /api/v1/task-lists/1/tasks?is_completed=false&priority__in=low,medium&created_at__gte=2025-06-20
+```
+
+5. **Actualizar el estado de tareas:**
+
+```http
+PUT /api/v1/tasks/1
+Content-Type: application/json
+
+{
+  "is_completed": true
+}
+```
+
+> También se puede modificar la descripción (`description`) o prioridad (`priority`) de una tarea, pero **NO** la lista a la que pertenece.
+
+*Nota*: las prioridades están establecidas por un ENUM de base de datos, por lo cual sólo se puede definir 3 prioridades: `low`, `medium` o `high`.
+
+## 📚 Mapa de la API
 
 ### Endpoints principales
 
 - `POST /api/v1/register` - Registro de usuario.
 
 - `POST /api/v1/login` - Login de usuario, devuelve JWT en cookie.
+
+- `POST /api/v1/logout`- Quitar Cookie JWT, bloquea acceso a rutas protegidas.
 
 - `GET /api/v1/task-lists` - Listar todas las listas de tareas.
 
