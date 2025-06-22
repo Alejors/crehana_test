@@ -4,13 +4,18 @@ from app.usecases import UserUsecase
 from app.domain.schemas import UserCreate, UserBase, UserOut, ApiResponse
 
 
-TOKEN_NAME="access_token"
+TOKEN_NAME = "access_token"
+
 
 def create_user_route(user_usecase: UserUsecase) -> APIRouter:
 
     router: APIRouter = APIRouter()
 
-    @router.post("/register", response_model=ApiResponse[UserOut])
+    @router.post(
+        "/register",
+        response_model=ApiResponse[UserOut],
+        status_code=status.HTTP_201_CREATED,
+    )
     async def register(payload: UserCreate):
         try:
             user_created = await user_usecase.create_user(payload.to_entity())
@@ -47,7 +52,7 @@ def create_user_route(user_usecase: UserUsecase) -> APIRouter:
             raise
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
-        
+
     @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
     async def logout(response: Response):
         response.delete_cookie(key=TOKEN_NAME)
