@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import select
 from typing import List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.domain.entities import Task
 from app.domain.interfaces import ITaskRepository
@@ -18,9 +18,13 @@ class SQLAlchemyTaskRepository(ITaskRepository):
         self.db = session
 
     async def _find_by_id(self, session, id: int):
-        stmt = select(TaskModel).where(
-            TaskModel.id == id,
-            TaskModel.deleted_at.is_(None),
+        stmt = (
+            select(TaskModel)
+            .options(selectinload(TaskModel.assigned_user))
+            .where(
+                TaskModel.id == id,
+                TaskModel.deleted_at.is_(None),
+            )
         )
         result = await session.execute(stmt)
         return result.scalar_one_or_none()
@@ -70,10 +74,14 @@ class SQLAlchemyTaskRepository(ITaskRepository):
         additional_filters = parse_filters(filters, TaskModel) if filters else True
 
         async with self.db() as session:
-            stmt = select(TaskModel).where(
-                TaskModel.task_list_id == task_list_id,
-                TaskModel.deleted_at.is_(None),
-                additional_filters,
+            stmt = (
+                select(TaskModel)
+                .options(selectinload(TaskModel.assigned_user))
+                .where(
+                    TaskModel.task_list_id == task_list_id,
+                    TaskModel.deleted_at.is_(None),
+                    additional_filters,
+                )
             )
 
             result = await session.execute(stmt)

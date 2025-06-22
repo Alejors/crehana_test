@@ -10,6 +10,7 @@ class TaskBase(BaseModel):
     task_list_id: int | None = None
     is_completed: bool = False
     priority: TaskPriority = TaskPriority.medium
+    assigned_user_email: Optional[str] = None
 
     def to_entity(self) -> Task:
         return Task(
@@ -41,4 +42,5 @@ class TaskOut(TaskBase):
             task_list_id=entity.task_list_id,
             is_completed=entity.is_completed,
             priority=entity.priority,
+            assigned_user_email=entity.assigned_user_email,
         )

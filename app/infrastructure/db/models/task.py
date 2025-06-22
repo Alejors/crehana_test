@@ -15,8 +15,10 @@ class TaskModel(TimestampMixin, Base):
     task_list_id = Column(Integer, ForeignKey("task_lists.id"), nullable=False)
     is_completed = Column(Boolean, default=False)
     priority = Column(SQLAEnum(TaskPriority), default=TaskPriority.medium)
+    assigned_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
     task_list = relationship("TaskListModel", back_populates="tasks")
+    assigned_user = relationship("UserModel", foreign_keys=[assigned_user_id])
 
     @staticmethod
     def from_entity(entity: Task) -> "TaskModel":
@@ -38,4 +40,5 @@ class TaskModel(TimestampMixin, Base):
             created_at=self.created_at,
             updated_at=self.updated_at,
             deleted_at=self.deleted_at,
+            assigned_user_email=self.assigned_user.email if self.assigned_user else None
         )

@@ -15,3 +15,4 @@ class Task:
     updated_at: Optional[datetime] = None
     deleted_at: Optional[datetime] = None
     id: Optional[int] = None
+    assigned_user_email: Optional[str] = None
