@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 from app.domain.entities import Task
@@ -10,7 +10,7 @@ class TaskBase(BaseModel):
     task_list_id: int | None = None
     is_completed: bool = False
     priority: TaskPriority = TaskPriority.medium
-    assigned_user_email: Optional[str] = None
+    assigned_user_email: Optional[EmailStr] = None
 
     def to_entity(self) -> Task:
         return Task(
@@ -26,7 +26,7 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     is_completed: Optional[bool] = None
     priority: Optional[TaskPriority] = None
-    assigned_user_email: Optional[str] = None
+    assigned_user_email: Optional[EmailStr] = None
 
     def to_entity(self) -> Task:
         return Task(self.description, None, self.is_completed, self.priority, assigned_user_email=self.assigned_user_email)

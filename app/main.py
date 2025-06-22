@@ -10,6 +10,9 @@ from app.infrastructure.repositories import (
     SQLAlchemyUserRepository,
 )
 
+# Services
+from app.infrastructure.services import TerminalMailingService
+
 # Usecases
 from app.usecases import (
     Healthcheck,
@@ -45,10 +48,18 @@ sqlalchemy_task_list_repository = SQLAlchemyTaskListRepository(SessionLocal)
 sqlalchemy_task_repository = SQLAlchemyTaskRepository(SessionLocal)
 sqlalchemy_user_repository = SQLAlchemyUserRepository(SessionLocal)
 
+# Services
+terminal_mailing_service = TerminalMailingService()
+
 # Usecases
 healthcheck_usecase = Healthcheck()
 task_list_usecase = TaskListUsecase(sqlalchemy_task_list_repository)
-task_usecase = TaskUsecase(sqlalchemy_task_repository, sqlalchemy_task_list_repository, sqlalchemy_user_repository)
+task_usecase = TaskUsecase(
+    sqlalchemy_task_repository,
+    sqlalchemy_task_list_repository,
+    sqlalchemy_user_repository,
+    terminal_mailing_service,
+)
 user_usecase = UserUsecase(sqlalchemy_user_repository)
 
 healthcheck_router = create_healthcheck_route(healthcheck_usecase)
